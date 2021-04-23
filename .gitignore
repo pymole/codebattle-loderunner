@@ -193,7 +193,5 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 
-env/
 node_modules/
-*/__pycache__
-*.pyc
+package-lock.json
