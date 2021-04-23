@@ -4,8 +4,7 @@
   "description": "Создать вирутальное окружение для Solver:\r ```commandline\r python -m venv env\r ```",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js env/Scripts/python solver/main.py\n",
-    "linux": "node main.js env/bin/python solver/main.py"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
