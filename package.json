@@ -1,0 +1,22 @@
+{
+  "name": "dead-inside",
+  "version": "1.0.0",
+  "description": "Создать вирутальное окружение для Solver:\r ```commandline\r python -m venv env\r ```",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js env/Scripts/python solver/main.py\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pymole/codebattle-loderunner.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pymole/codebattle-loderunner/issues"
+  },
+  "homepage": "https://github.com/pymole/codebattle-loderunner#readme",
+  "dependencies": {
+    "websocket": "^1.0.34"
+  }
+}

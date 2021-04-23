@@ -1,8 +1,10 @@
-﻿var boardRegex = /board=/;
+﻿0
+
+var boardRegex = /board=/;
 class GameClient {
   constructor(url) {
-
 	this.path = url.replace("http", "ws").replace("board/player/", "ws?user=").replace("?code=", "&code=");
+	console.log(this.path);
         this.board = new Board();
   }
 
@@ -64,4 +66,3 @@ class GameClient {
     this.socket.send(msg)
   }
 }
-

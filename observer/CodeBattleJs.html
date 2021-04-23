@@ -23,11 +23,12 @@
       DO_NOTHING: 'stop'
     };
     
-    var gcb = new GameClient("")
+    var gcb = new GameClient("https://dojorena.io/codenjoy-contest/board/player/dojorena340?code=4030082672378005857")
     gcb.textArea = text;
     gcb.run(function(board) {
       var random = Math.floor(Math.random() * Object.keys(ACTIONS).length);
       return ACTIONS[Object.keys(ACTIONS)[random]];
+
     });
   </script>
 </body>
