@@ -1,28 +1,25 @@
-// TODO: преобразовать клиент
-
-// var gameClient = new GameClient(url);
-
-// gameClient.run(function(board) {
-//   var random = Math.floor(Math.random() * Object.keys(ACTIONS).length);
-//   return ACTIONS[Object.keys(ACTIONS)[random]];
-// });
-
 const util = require('util');
 const readline = require('readline');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 
-solverStartCommand = process.argv[1]
-const solver = exec(solverStartCommand);
+const solver = spawn(process.argv[2], process.argv.slice(3));
 
-rl = readline.createInterface({input: solver.stdin, output: solver.stdout});
-question = util.promisify(rl.question).bind(rl);
+const rl = readline.createInterface({input: solver.stdout, output: solver.stdin});
+
+const question = util.promisify(rl.question).bind(rl);
 
 
 async function main() {
   while (true) {
-    state = "state\n";
-    command = await question(state);
-    console.log(command);
+      const state = "state\n";
+      try{
+          const command = await question(state);
+          console.log(command);
+      }
+
+      catch (e) {
+          console.log(e);
+      }
   }
 }
 
