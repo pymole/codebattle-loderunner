@@ -15,67 +15,13 @@ class Node extends Point {
 
 
 class Environment {
-    constructor(size) {
-        this.mapSize = size;
-        
-        this.walls = [];
-        this.pipes = [];
-        this.ladders = [];
-    }
-
-    createGraph() {
-        const nodeMap = new Map();
-        const visited = new Set();
-        
-        for (const wall of this.walls.values()) {
-            const aboveWallY = wall.y + 1;
-            // Отсекаем стены, которые находятся по краям и над которыми не пусто
-            if (wall.x < 1 || this.mapSize - 1 <= wall.x ||
-                aboveWallY < 0 || aboveWallY >= this.mapSize - 2 ||
-                !this.isEmpty(getIndex(wall.x, aboveWallY))) {
-                continue;
-            }
-    
-            console.log('wall', wall);
-            
-            const aboveWallNode = this.aboveWallPattern(wall.x, aboveWallY, visited, nodeMap);
-            visited.add(aboveWallNode);
-        }
-    
-        for (const pipe of this.pipes.values()) {
-            console.log('pipe', pipe);
-            const centerPipeNode = this.pipePattern(pipe.x, pipe.y, visited, nodeMap);
-            visited.add(centerPipeNode);
-        }
-    
-        for (const ladder of this.ladders.values()) {
-            console.log('ladder', ladder);
-            const centerLadderNode = this.ladderPattern(ladder.x, ladder.y, visited, nodeMap);
-            visited.add(centerLadderNode);
-        }
-    
-        return nodeMap;
-    }
-    
-    aboveWallPattern(aboveWallX, aboveWallY, visited, nodeMap) {
-        console.log(aboveWallX, aboveWallY);
-        const centerNode = this.getOrCreateNode(aboveWallX, aboveWallY, nodeMap);
-        
-        this.linkNodeToSideNodes(centerNode, aboveWallX - 1, aboveWallY, visited, nodeMap);
-        this.linkNodeToSideNodes(centerNode, aboveWallX + 1, aboveWallY, visited, nodeMap);
-        
-        return centerNode;
-    }
-    
-    
-    pipePattern(pipeX, pipeY, visited, nodeMap) {
-        
-        const pipeNode = this.aboveWallPattern(pipeX, pipeY, visited, nodeMap);
-    
-        // Также можно спрыгнуть вниз
-        this.linkNodeToSideNodes(pipeNode, pipeX, pipeY - 1, visited, nodeMap);
-    
-        return pipeNode;
+    constructor() {
+        this.map = [];
+        this.size = 0;
+        this.walls = new Set();
+        this.bricks = new Set();
+        this.ladder = new Set();
+        this.pipe = new Set();
     }
     
     ladderPattern(ladderX, ladderY, visited, nodeMap) {

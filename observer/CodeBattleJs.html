@@ -11,7 +11,7 @@
 <body id="body">
   <textarea id="text" readonly=true style="display: block; width: 100%; height: 100%; resize: none;"></textarea>
   <script type="text/javascript">
-  
+
     var ACTIONS = {
       GO_LEFT: 'left',
       GO_RIGHT: 'right',
@@ -22,7 +22,7 @@
       SUICIDE: 'act(0)',
       DO_NOTHING: 'stop'
     };
-    
+
     var gcb = new GameClient("https://dojorena.io/codenjoy-contest/board/player/dojorena340?code=4030082672378005857")
     gcb.textArea = text;
     gcb.run(function(board) {
