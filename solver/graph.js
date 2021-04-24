@@ -13,86 +13,159 @@ class Node extends Point {
 }
 
 
-// let walls = new Set(walls.forEach(wall => [wall.x, wall.y] ));
-// let pipes = new Set(pipes.forEach(pipe => [pipe.x, pipe.y] ));
-// let ladderMap = new Set(ladders.forEach(ladder => [ladder.x, ladder.y] ));
-
-
 function createGraph(walls, pipes, ladders, mapSize) {
-    let nodeMap = new Map();
+    const nodeMap = new Map();
+    const visited = new Set();
     
     for (const wall of walls) {
-        let center = [wall[0], wall[1] + 1];
-        if (walls.has(center)) {
+        const aboveY = wall.y + 1;
+        if (wall.x < 1 || mapSize - 1 <= wall.x || aboveY < 0 || aboveY >= mapSize - 2 ||
+            !isEmpty(getIndex(center), walls, pipes, ladders)) {
             continue;
         }
+
+        console.log('wall', wall);
         
-        let centerNode, created = getOrCreateNode(...center, nodeMap);
-        
-        let left = [wall[0] - 1, wall[1] + 1];
-        linkNodeToSideNodes(centerNode, left, nodeMap, walls);
-        let right = [wall[0] + 1, wall[1] + 1];
-        linkNodeToSideNodes(centerNode, right, nodeMap, walls);
+        const centerNode = aboveWallPattern(center, walls, pipes, ladders, visited, nodeMap);
+        visited.add(centerNode);
     }
 
     for (const pipe of pipes) {
-        let centerNode, created = getOrCreateNode(...pipe, nodeMap);
+        console.log('pipe', wall);
+        const centerNode = pipePattern(pipe, walls, pipes, ladders, visited, nodeMap);
+        visited.add(centerNode);
+    }
+
+    for (const ladder of ladders) {
+        console.log('ladder', wall);
+        const centerNode = ladderPattern(ladder, walls, pipes, ladders, visited, nodeMap);
+        visited.add(centerNode);
+    }
+
+    return nodeMap;
+}
+
+
+function aboveWallPattern(center, walls, pipes, ladders, visited, nodeMap) {
+    const centerNode = getOrCreateNode(center, nodeMap);
+    
+    const left = [center[0], center[1] + 1];
+    linkNodeToSideNodes(centerNode, left, walls, pipes, ladders, visited, nodeMap);
+
+    const right = [center[0], center[1] + 1];
+    linkNodeToSideNodes(centerNode, right, walls, pipes, ladders, visited, nodeMap);
+
+    return centerNode;
+}
+
+
+function pipePattern(center, walls, pipes, ladders, visited, nodeMap) {
+
+    const centerNode = aboveWallPattern(center, walls, pipes, ladders, visited, nodeMap);
+
+    // Также можно спрыгнуть вниз
+    const down = [center[0], center[1] - 1];
+    linkNodeToSideNodes(centerNode, down, walls, pipes, ladders, visited, nodeMap);
+
+    return centerNode;
+}
+
+function ladderPattern(center, walls, pipes, ladders, visited, nodeMap) {
+
+    const centerNode = pipePattern(center, walls, pipes, ladders, visited, nodeMap);
+    
+    const aboveLadder = [center[0], center[1] + 1];
+    
+    // Соединяем лестницу с верхушкой, если там не стена
+    if (!walls.has(aboveLadder)) {
+        const aboveLadderNode = getOrCreateNode(aboveLadder, nodeMap);
+        centerNode.addChild(aboveNode);
         
-        let left = [wall[0] - 1, wall[1] + 1];
-        linkNodeToSideNodes(centerNode, left, nodeMap, walls);
-        let right = [wall[0] + 1, wall[1] + 1];
-        linkNodeToSideNodes(centerNode, right, nodeMap, walls);
+        // Если наверху пустота, то сверху запускаем такой же паттерн, как и у труб
+        if (!pipes.has(aboveLadder) && !ladders.has(aboveLadder) && !visited.has(aboveLadderNode)) {
+            pipePattern(aboveLadder, walls, pipes, ladders, visited, nodeMap)
+            visited.add(aboveLadderNode);
+        }
     }
+
+    return centerNode;
 }
 
 
-function getOrCreateNode(pos, nodeMap) {
-    if (nodeMap.has(pos)) {
-        return nodeMap.get(pos), false;
-    }
+function linkNodeToSideNodes(node, sidePos, walls, pipes, ladders, visited, nodeMap) {
     
-    node = new Node(...pos);
-    nodeMap.set(pos, node);
-    
-    return node, true;
-}
-
-function isFree(pos, walls, pipes, ladders) {
-    return !walls.has(pos) && !pipes.has(pos) && !ladders.has(pos)
-}
-
-function linkNodeToSideNodes(node, sidePos, walls, pipes, ladders, nodeMap) {
-    
-    // Смотри в бок, если там пусто
-    if (!walls.has(sidePos) && !pipes.has(sidePos) && !ladders.has(sidePos)) {
-        let sideNode, created = getOrCreateNode(...sidePos, nodeMap);
+    // Соединяемся с соседом, если там не стена
+    if (!walls.has(sidePos)) {
+        const sideNode = getOrCreateNode(sidePos, nodeMap);
         node.addChild(sideNode);
-        
-        if (!created) {
-            fillFallNodes(sidePos, walls, nodeMap);
+        // Если на стороне пустота, то падаем
+        if (!pipes.has(sidePos) && !ladders.has(sidePos) && !visited.has(node)) {
+            fillFallNodes(sidePos, walls, pipes, ladders, visited, nodeMap);
+            visited.add(sidePos);
         }
     }
 }
 
 
-function fillFallNodes(pos, walls, nodeMap) {
-    let upNode = nodeMap.get(pos);
-    let pos = [pos[0], pos[1] - 1];
+function getOrCreateNode(x, y, mapSize, nodeMap) {
+    index = getIndex(x, y, mapSize);
 
-    while (!walls.has(pos)) {
-        let downNode, created = getOrCreateNode(pos);
+    if (nodeMap.has(index)) {
+        return nodeMap.get(index);
+    }
+    
+    node = new Node(x, y);
+    nodeMap.set(index, node);
+    
+    return node;
+}
+
+function isEmpty(index, walls, pipes, ladders) {
+    return !walls.has(index) && !pipes.has(index) && !ladders.has(index)
+}
+
+
+function fillFallNodes(pos, walls, pipes, ladders, visited, nodeMap) {
+    let upNode = nodeMap.get(pos);
+    let downPos = [pos[0], pos[1] - 1];
+
+    // Если под узлом нет земли и лестницы, а также узел не на трубе, то продолжаем опускаться
+    while (!walls.has(downPos) && !ladders.has(downPos)) {
+        let downNode = getOrCreateNode(pos, nodeMap);
         
         upNode.addChild(downNode);
 
-        if (!created) {
+        if (visited.has(downPos) || pipes.has(downPos)) {
             break;
         }
 
-        pos = [pos[0], pos[1] - 1];
+        visited.add(downPos);
+        
+        pos = downPos;
+        downPos = [pos[0], pos[1] - 1];
         upNode = downNode;
     }
 }
 
-function getIndexFromPos(x, y, size) {
+function getIndex(x, y, size) {
     return y * size + x;
 }
+
+
+console.log([1, 2] in (new Set([[1, 2]])));
+
+// pipes = new Set([[2, 3], [3, 3]]);
+// ladders = new Set([[1, 1], [1, 2], [1, 3]]);
+// walls = new Set([
+//     [0, 4], [1, 4], [2, 4], [3, 4], [4, 4],
+//     [0, 3], [4, 3],
+//     [0, 2], [4, 2],
+//     [0, 1], [4, 1],
+//     [0, 0], [1, 0], [2, 0], [3, 0], [4, 0],
+// ]);
+
+
+// for (const n of createGraph(walls, pipes, ladders, 5).values()) {
+//     console.log(n.x, n.y, n.children);
+//     break;
+// }
