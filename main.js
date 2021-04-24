@@ -8,9 +8,9 @@ const boardRegex = /board=/;
 const client = new WebSocketClient();
 
 const env = new Environment()
+const staticObserver = new StaticObservation(env);
 
 let isFirstMassage = true;
-let staticObserver;
 
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
@@ -26,9 +26,8 @@ client.on('connect', function(connection) {
     });
     connection.on('message', (message) => {
         const board = message.utf8Data.substr(6);
-        if(isFirstMassage) staticObserver = new StaticObservation(env);
-        staticObserver.observe(board);
-        console.log(env.size);
+        if(isFirstMassage) staticObserver.observe(board);
+        console.log(env);
         // const board = new Board(message.utf8Data.replace(boardRegex, ''));
         // console.log(board.myPosition + '\n\n');
         connection.sendUTF('left')

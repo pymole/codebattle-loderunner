@@ -23,17 +23,10 @@ class Observation {
 class StaticObservation extends Observation {
     constructor(env) {
         super(env);
-        console.log(this.env);
     }
 
     observe(board) {
-        this.env.size = Math.sqrt(board);
-        this.env.bricks = new Set();
-        this.env.walls = new Set();
-        this.env.ladder = new Set();
-        this.env.pipe = new Set();
-        console.log(this.env);
-
+        this.env.size = Math.sqrt(board.length);
         for(let i = 0; i < board.length; i++) {
             board[i] === '#' && this.env.bricks.add(getXY(i, this.env.size))
             board[i] === '☼' && this.env.walls.add(getXY(i, this.env.size))
