@@ -1,7 +1,6 @@
 function getXY(index, size) {
     const y = Math.floor(index / size);
     const x = index % size;
-    console.log(x, y, index, size);
     return [x, y]
 }
 

@@ -37,7 +37,6 @@ client.on('connect', function(connection) {
         goldObservation.observe(board);
         hunterObservation.observe(board);
         playerObservation.observe(board);
-        console.log(env);
         // const board = new Board(message.utf8Data.replace(boardRegex, ''));
         // console.log(board.myPosition + '\n\n');
         connection.sendUTF('left')

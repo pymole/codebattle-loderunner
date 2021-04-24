@@ -11,7 +11,7 @@ class StaticObservation extends Observation {
 
     observe(board) {
         this.env.mapSize = Math.sqrt(board.length);
-        
+        console.log('asdasd');
         for (let i = 0, real_i = board.length - 1; i < board.length; i++, real_i--) {
             // У нас перевернутая карта (y = 0 - это внизу)
             
