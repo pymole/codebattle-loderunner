@@ -18,7 +18,4 @@ class Observation {
 // Если объект наблюдения возвращает флаг о прекращении, то удаляем его из списка наблюдений.
 
 
-
-const observations = [];
-
 module.exports = Observation;

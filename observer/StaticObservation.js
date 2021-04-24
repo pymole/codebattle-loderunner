@@ -1,8 +1,8 @@
 const Observation = require('./observation');
 const staticObjects = require('../shared/staticObjects');
 const gameObjects = require('../solver/game-objects');
-const getXY = require('../shared/utils').getXY;
-const getIndex = require('../shared/utils').getIndex;
+const { getXY } = require('../shared/utils');
+
 
 class StaticObservation extends Observation {
     constructor(env) {
@@ -10,26 +10,34 @@ class StaticObservation extends Observation {
     }
 
     observe(board) {
-        this.env.size = Math.sqrt(board.length);
-        for(let i = 0; i < board.length; i++) {
-            if(board[i] === '#' || board[i] === '☼') {
-                const [x, y] = getXY(i, this.env.size);
-                const wall = new gameObjects.Wall(x, y, board[i] === '#')
-                this.env.walls.set(getIndex(wall.x, wall.y, this.env.size), wall)
+        this.env.mapSize = Math.sqrt(board.length);
+        
+        for (let i = 0, real_i = board.length - 1; i < board.length; i++, real_i--) {
+            // У нас перевернутая карта (y = 0 - это внизу)
+            
+            if (board[i] === '#' || board[i] === '☼') {
+                const [x, y] = getXY(real_i, this.env.mapSize);
+                const wall = new gameObjects.Wall(x, y, board[i] === '#');
+                this.env.walls.set(real_i, wall);
+                continue;
             }
 
-            if(staticObjects.ladder.includes(board[i])) {
-                const [x, y] = getXY(i, this.env.size);
-                const ladder = new gameObjects.Ladder(x, y)
-                this.env.ladders.set(getIndex(ladder.x, ladder.y, this.env.size), ladder)
+            if (staticObjects.ladder.includes(board[i])) {
+                const [x, y] = getXY(real_i, this.env.mapSize);
+                const ladder = new gameObjects.Ladder(x, y);
+                this.env.ladders.set(real_i, ladder);
+                continue;
             }
 
-            if(staticObjects.pipe.includes(board[i])) {
-                const [x, y] = getXY(i, this.env.size);
-                const pipe = new gameObjects.Pipe(x, y)
-                this.env.pipes.set(getIndex(pipe.x, pipe.y, this.env.size), pipe)
+            if (staticObjects.pipe.includes(board[i])) {
+                const [x, y] = getXY(real_i, this.env.mapSize);
+                const pipe = new gameObjects.Pipe(x, y);
+                this.env.pipes.set(real_i, pipe);
             }
         }
+
+        // console.log(this.env);
+
         return true;
     }
 }

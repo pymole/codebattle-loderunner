@@ -1,7 +1,8 @@
-const getXY = (index, size) => {
-    const y = Math.ceil(index / size);
+function getXY(index, size) {
+    const y = Math.floor(index / size);
     const x = index % size;
-    return [x,y]
+    console.log(x, y, index, size);
+    return [x, y]
 }
 
 function getIndex(x, y, size) {
