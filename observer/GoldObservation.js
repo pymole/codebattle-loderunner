@@ -9,11 +9,12 @@ class GoldObservation extends Observation {
     }
 
     observe(board) {
-        for (let i = 0, real_i = board.length - 1; i < board.length; i++, real_i--) {
+        for (let i = 0; i < board.length; i++) {
             if (goldSymbol.has(board[i])) {
-                const [x, y] = getXY(real_i, this.env.mapSize);
+                const [x, y] = getXY(i, this.env.mapSize);
+                y = this.env.mapSize - y - 1;
                 const gold = new gameObjects.Gold(x, y, goldSymbol.get(board[i]))
-                this.env.gold.set(real_i, gold);
+                this.env.gold.set(getIndex(x, y, this.env.mapSize), gold);
             }
         }
     }

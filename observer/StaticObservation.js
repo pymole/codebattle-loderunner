@@ -1,7 +1,7 @@
 const Observation = require('./observation');
 const staticObjects = require('../shared/staticObjects');
 const gameObjects = require('../solver/game-objects');
-const { getXY } = require('../shared/utils');
+const { getXY, getIndex } = require('../shared/utils');
 
 
 class StaticObservation extends Observation {
@@ -11,32 +11,33 @@ class StaticObservation extends Observation {
 
     observe(board) {
         this.env.mapSize = Math.sqrt(board.length);
-        console.log('asdasd');
-        for (let i = 0, real_i = board.length - 1; i < board.length; i++, real_i--) {
+        
+        for (let i = 0; i < board.length; i++) {
             // У нас перевернутая карта (y = 0 - это внизу)
             
             if (board[i] === '#' || board[i] === '☼') {
-                const [x, y] = getXY(real_i, this.env.mapSize);
+                let [x, y] = getXY(i, this.env.mapSize);
+                y = this.env.mapSize - y - 1;
                 const wall = new gameObjects.Wall(x, y, board[i] === '#');
-                this.env.walls.set(real_i, wall);
+                this.env.walls.set(getIndex(x, y, this.env.mapSize), wall);
                 continue;
             }
 
             if (staticObjects.ladder.includes(board[i])) {
-                const [x, y] = getXY(real_i, this.env.mapSize);
+                let [x, y] = getXY(i, this.env.mapSize);
+                y = this.env.mapSize - y - 1;
                 const ladder = new gameObjects.Ladder(x, y);
-                this.env.ladders.set(real_i, ladder);
+                this.env.ladders.set(getIndex(x, y, this.env.mapSize), ladder);
                 continue;
             }
 
             if (staticObjects.pipe.includes(board[i])) {
-                const [x, y] = getXY(real_i, this.env.mapSize);
+                let [x, y] = getXY(i, this.env.mapSize);
+                y = this.env.mapSize - y - 1;
                 const pipe = new gameObjects.Pipe(x, y);
-                this.env.pipes.set(real_i, pipe);
+                this.env.pipes.set(getIndex(x, y, this.env.mapSize), pipe);
             }
         }
-
-        // console.log(this.env);
 
         return true;
     }
