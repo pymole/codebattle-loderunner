@@ -12,11 +12,9 @@ class Node extends Point {
     }
 }
 
-
 // let walls = new Set(walls.forEach(wall => [wall.x, wall.y] ));
 // let pipes = new Set(pipes.forEach(pipe => [pipe.x, pipe.y] ));
 // let ladderMap = new Set(ladders.forEach(ladder => [ladder.x, ladder.y] ));
-
 
 function createGraph(walls, pipes, ladders, mapSize) {
     let nodeMap = new Map();

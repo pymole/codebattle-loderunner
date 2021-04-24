@@ -1,6 +1,8 @@
 class Environment {
-    constructor(size) {
+    constructor() {
         this.map = [];
-        this.size = size;
+        this.size = 0;
     }
 }
+
+module.exports = Environment;

@@ -1,9 +1,16 @@
 const WebSocketClient = require('websocket').client;
+const StaticObservation = require('./observer/observation').StaticObservation
 const Board = require('./observer/LoderunnerBoard');
+const Environment = require('./solver/environment')
 
 const url = 'wss://dojorena.io/codenjoy-contest/ws?user=dojorena340&code=4030082672378005857';
 const boardRegex = /board=/;
 const client = new WebSocketClient();
+
+const env = new Environment()
+
+let isFirstMassage = true;
+let staticObserver;
 
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
@@ -18,13 +25,18 @@ client.on('connect', function(connection) {
         console.log('Connection Closed');
     });
     connection.on('message', (message) => {
-        if (message.type === 'utf8') {
-            const board = new Board(message.utf8Data.replace(boardRegex, ''));
-            console.log(board.myPosition + '\n\n');
-            connection.sendUTF('left')
-        }
+        const board = message.utf8Data.substr(6);
+        if(isFirstMassage) staticObserver = new StaticObservation(env);
+        staticObserver.observe(board);
+        console.log(env.size);
+        // const board = new Board(message.utf8Data.replace(boardRegex, ''));
+        // console.log(board.myPosition + '\n\n');
+        connection.sendUTF('left')
+
+
+
+        isFirstMassage = false;
     });
 });
-
 
 client.connect(url);

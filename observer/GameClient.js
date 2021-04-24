@@ -1,6 +1,4 @@
-﻿0
-
-var boardRegex = /board=/;
+﻿var boardRegex = /board=/;
 class GameClient {
   constructor(url) {
 	this.path = url.replace("http", "ws").replace("board/player/", "ws?user=").replace("?code=", "&code=");
