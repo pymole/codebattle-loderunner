@@ -1,6 +1,3 @@
-const staticObjects = require('../shared/staticObjects');
-const getXY = require('../shared/utils').getXY;
-
 class Observation {
     constructor(env) {
         this.env = env;
