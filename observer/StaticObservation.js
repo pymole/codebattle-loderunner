@@ -17,25 +17,22 @@ class StaticObservation extends Observation {
             
             if (board[i] === '#' || board[i] === '☼') {
                 let [x, y] = getXY(i, this.env.mapSize);
-                y = this.env.mapSize - y - 1;
                 const wall = new gameObjects.Wall(x, y, board[i] === '#');
-                this.env.walls.set(getIndex(x, y, this.env.mapSize), wall);
+                this.env.walls.set(i, wall);
                 continue;
             }
 
             if (staticObjects.ladder.includes(board[i])) {
                 let [x, y] = getXY(i, this.env.mapSize);
-                y = this.env.mapSize - y - 1;
                 const ladder = new gameObjects.Ladder(x, y);
-                this.env.ladders.set(getIndex(x, y, this.env.mapSize), ladder);
+                this.env.ladders.set(i, ladder);
                 continue;
             }
 
             if (staticObjects.pipe.includes(board[i])) {
                 let [x, y] = getXY(i, this.env.mapSize);
-                y = this.env.mapSize - y - 1;
                 const pipe = new gameObjects.Pipe(x, y);
-                this.env.pipes.set(getIndex(x, y, this.env.mapSize), pipe);
+                this.env.pipes.set(i, pipe);
             }
         }
 

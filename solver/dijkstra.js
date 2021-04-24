@@ -1,3 +1,7 @@
-function dijkstra(graph, targetIndex) {
-    graph
+function dijkstra(graph, startIndex, targetIndex) {
+    targetNode = graph.get(targetIndex);
+
+    while (!startIndex === targetIndex) {
+
+    }
 }

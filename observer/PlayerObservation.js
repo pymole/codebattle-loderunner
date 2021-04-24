@@ -9,7 +9,7 @@ class PlayerObservation extends Observation {
     }
 
     observe(board) {
-        for (let i = 0, ; i < board.length; i++) {
+        for (let i = 0; i < board.length; i++) {
             if (playerSymbols.includes(board[i])) {
                 const [x, y] = getXY(i, this.env.mapSize);
                 y = this.env.mapSize - y - 1;
