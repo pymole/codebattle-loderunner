@@ -1,7 +1,7 @@
-const goldSymbol = new Map([
+const goldSymbols = new Map([
     ['$', 'Y'],
     ['&', 'G'],
     ['@', 'R'],
 ]);
 
-module.exports = goldSymbol;
+module.exports = goldSymbols;

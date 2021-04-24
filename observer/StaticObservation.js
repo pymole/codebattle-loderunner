@@ -21,13 +21,13 @@ class StaticObservation extends Observation {
             if(staticObjects.ladder.includes(board[i])) {
                 const [x, y] = getXY(i, this.env.size);
                 const ladder = new gameObjects.Ladder(x, y)
-                this.env.ladder.set(getIndex(ladder.x, ladder.y, this.env.size), ladder)
+                this.env.ladders.set(getIndex(ladder.x, ladder.y, this.env.size), ladder)
             }
 
             if(staticObjects.pipe.includes(board[i])) {
                 const [x, y] = getXY(i, this.env.size);
                 const pipe = new gameObjects.Pipe(x, y)
-                this.env.pipe.set(getIndex(pipe.x, pipe.y, this.env.size), pipe)
+                this.env.pipes.set(getIndex(pipe.x, pipe.y, this.env.size), pipe)
             }
         }
         return true;

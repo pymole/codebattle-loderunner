@@ -1,6 +1,9 @@
 const WebSocketClient = require('websocket').client;
 const StaticObservation = require('./observer/StaticObservation')
 const GoldObservation = require('./observer/GoldObservation');
+const HunterObservation = require('./observer/HunterObservation');
+const PlayerObservation = require('./observer/PlayerObservation');
+
 const Board = require('./observer/LoderunnerBoard');
 const Environment = require('./solver/environment').Environment
 
@@ -11,6 +14,8 @@ const client = new WebSocketClient();
 const env = new Environment()
 const staticObserver = new StaticObservation(env);
 const goldObservation = new GoldObservation(env);
+const hunterObservation = new HunterObservation(env);
+const playerObservation = new PlayerObservation(env);
 
 let isFirstMassage = true;
 
@@ -30,6 +35,8 @@ client.on('connect', function(connection) {
         const board = message.utf8Data.substr(6);
         if(isFirstMassage) staticObserver.observe(board);
         goldObservation.observe(board);
+        hunterObservation.observe(board);
+        playerObservation.observe(board);
         console.log(env);
         // const board = new Board(message.utf8Data.replace(boardRegex, ''));
         // console.log(board.myPosition + '\n\n');

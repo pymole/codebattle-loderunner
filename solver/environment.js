@@ -19,9 +19,11 @@ class Environment {
         this.map = [];
         this.size = 0;
         this.walls = new Map();
-        this.ladder = new Map();
-        this.pipe = new Map();
+        this.ladders = new Map();
+        this.pipes = new Map();
         this.gold = new Map();
+        this.hunters = new Map();
+        this.players = new Map();
     }
 
     ladderPattern(ladderX, ladderY, visited, nodeMap) {

@@ -64,7 +64,7 @@ var Elements = {
     OTHER_HERO_FALL_LEFT: '⊐',
     OTHER_HERO_FALL_RIGHT: '⊏',
 
-    /// ladder and pipe - you can walk
+    /// ladders and pipes - you can walk
     LADDER: 'H',
     PIPE: '~',
     PORTAL: '⊛',
@@ -105,7 +105,7 @@ class Board {
         return this._size;
     }
 
-    
+
     findAll(element) {
         let result = [];
         for (let i = 0; i < this._len; i++) {
@@ -165,7 +165,7 @@ class Board {
     get enemyPositions() {
         // Return the list of points for other heroes
         var result = [];
-        
+
         result = result.concat(this.findAll(Elements.ENEMY_LADDER));
         result = result.concat(this.findAll(Elements.ENEMY_LEFT));
         result = result.concat(this.findAll(Elements.ENEMY_PIPE_LEFT));
@@ -239,7 +239,7 @@ class Board {
     }
 
     get ladderPositions() {
-        // Returns the set of ladder Points
+        // Returns the set of ladders Points
         var result = [];
 
         result = result.concat(this.findAll(Elements.LADDER));
@@ -263,7 +263,7 @@ class Board {
     }
 
     get pipePositions() {
-        // Returns the set of pipe Points
+        // Returns the set of pipes Points
         var result = [];
 
         result = result.concat(this.findAll(Elements.PIPE));
@@ -281,7 +281,7 @@ class Board {
         return result;
     }
 
-    get barriers() {    
+    get barriers() {
         // Return the list of barriers Points
         var result = [];
         result = result.concat(this.wallPositions);
@@ -290,9 +290,9 @@ class Board {
 
     isNearToElement(x, y, elem) {
         var nearXY = [
-            { x: x + 1, y: y }, 
+            { x: x + 1, y: y },
             { x: x - 1, y: y },
-            { x: x, y: y + 1 }, 
+            { x: x, y: y + 1 },
             { x: x, y: y - 1 }
         ];
         if (!new Point(x, y).isOutOf(this._size)) {
@@ -334,9 +334,9 @@ class Board {
         // Counts the number of occurencies of elem nearby
         if (!new Point(x, y).isOutOf(this._size)) {
             var nearXY = [
-                { x: x + 1, y: y }, 
+                { x: x + 1, y: y },
                 { x: x - 1, y: y },
-                { x: x, y: y + 1 }, 
+                { x: x, y: y + 1 },
                 { x: x, y: y - 1 }
             ];
             return  nearXY.reduce((acc, item) => {
