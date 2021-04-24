@@ -1,3 +1,6 @@
+const staticObjects = require('../shared/staticObjects');
+const getXY = require('../shared/utils').getXY;
+
 class Observation {
     constructor(env) {
         this.env = env;
@@ -16,7 +19,6 @@ class Observation {
 
 // Здесь хранятся все наблюдения, которые должны просчитаться на тике
 // Если объект наблюдения возвращает флаг о прекращении, то удаляем его из списка наблюдений.
-
 
 
 const observations = [];
