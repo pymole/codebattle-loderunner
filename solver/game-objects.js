@@ -28,28 +28,39 @@ class Ladder extends Point {
 }
 
 
-class Hero {
-    
+class Hero extends Point {
+    constructor(x, y) {
+        super(x, y);
+    }
 }
 
 
-class Hunter {
-
+class Hunter extends Point  {
+    constructor(x, y) {
+        super(x, y);
+    }
 }
 
 
-class Gold {
-
+class Gold extends Point  {
+    constructor(x, y, type) {
+        super(x, y);
+        this.type = type;
+    }
 }
 
 
-class Pill {
-
+class Pill extends Point  {
+    constructor(x, y) {
+        super(x, y);
+    }
 }
 
 
-class Teleport {
-
+class Teleport extends Point  {
+    constructor(x, y) {
+        super(x, y);
+    }
 }
 
-module.exports = {Point, Wall, Pipe, Ladder};
+module.exports = {Point, Wall, Pipe, Ladder, Hero, Hunter, Gold, Pill, Teleport};

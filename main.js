@@ -1,7 +1,8 @@
 const WebSocketClient = require('websocket').client;
-const StaticObservation = require('./observer/observation').StaticObservation
+const StaticObservation = require('./observer/StaticObservation')
+const GoldObservation = require('./observer/GoldObservation');
 const Board = require('./observer/LoderunnerBoard');
-const Environment = require('./solver/environment')
+const Environment = require('./solver/environment').Environment
 
 const url = 'wss://dojorena.io/codenjoy-contest/ws?user=dojorena340&code=4030082672378005857';
 const boardRegex = /board=/;
@@ -9,6 +10,7 @@ const client = new WebSocketClient();
 
 const env = new Environment()
 const staticObserver = new StaticObservation(env);
+const goldObservation = new GoldObservation(env);
 
 let isFirstMassage = true;
 
@@ -27,6 +29,7 @@ client.on('connect', function(connection) {
     connection.on('message', (message) => {
         const board = message.utf8Data.substr(6);
         if(isFirstMassage) staticObserver.observe(board);
+        goldObservation.observe(board);
         console.log(env);
         // const board = new Board(message.utf8Data.replace(boardRegex, ''));
         // console.log(board.myPosition + '\n\n');

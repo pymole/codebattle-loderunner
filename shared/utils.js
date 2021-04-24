@@ -4,4 +4,8 @@ const getXY = (index, size) => {
     return [x,y]
 }
 
-module.exports.getXY = getXY;
+function getIndex(x, y, size) {
+    return y * size + x;
+}
+
+module.exports = {getXY, getIndex}

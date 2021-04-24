@@ -1,5 +1,5 @@
 const {Wall, Pipe, Ladder, Point} = require('./game-objects');
-
+const getIndex = require('../shared/utils').getIndex();
 
 class Node extends Point {
     constructor(x, y) {
@@ -18,16 +18,16 @@ class Environment {
     constructor() {
         this.map = [];
         this.size = 0;
-        this.walls = new Set();
-        this.bricks = new Set();
-        this.ladder = new Set();
-        this.pipe = new Set();
+        this.walls = new Map();
+        this.ladder = new Map();
+        this.pipe = new Map();
+        this.gold = new Map();
     }
-    
+
     ladderPattern(ladderX, ladderY, visited, nodeMap) {
-    
+
         const centerNode = this.pipePattern(ladderX, ladderY, visited, nodeMap);
-        
+
         const aboveLadderY = ladderY + 1;
         const aboveLadderIndex = getIndex(ladderX, aboveLadderY);
 
@@ -35,23 +35,23 @@ class Environment {
         if (!walls.has(aboveLadderIndex)) {
             const aboveLadderNode = this.getOrCreateNode(ladderX, aboveLadderY, nodeMap);
             centerNode.addChild(aboveNode);
-            
+
             // Если наверху пустота, то сверху запускаем такой же паттерн, как и у труб
             if (!pipes.has(aboveLadderIndex) && !ladders.has(aboveLadderIndex) && !visited.has(aboveLadderNode)) {
                 this.pipePattern(ladderX, aboveLadderY, visited, nodeMap);
                 visited.add(aboveLadderNode);
             }
         }
-    
+
         return centerNode;
     }
-    
+
     linkNodeToSideNodes(node, x, y, visited, nodeMap) {
         // Боковые узлы - это те, с которых можно упасть. Право, лево, низ
 
         // Соединяемся с соседом, если там не стена
         const sideNodeIndex = getIndex(x, y);
-        
+
         if (!this.walls.has(sideNodeIndex)) {
             const sideNode = this.getOrCreateNode(x, y, nodeMap);
             node.addChild(sideNode);
@@ -62,21 +62,21 @@ class Environment {
             }
         }
     }
-    
+
     fillFallNodes(x, upY, visited, nodeMap) {
         let upIndex = getIndex(x, upY, this.mapSize);
         let upNode = nodeMap.get(upIndex);
-        
+
         let downY = upY - 1;
         let downIndex = getIndex(x, downY, this.mapSize);
-        
+
         // Если под узлом нет земли и лестницы, а также узел не на трубе, то продолжаем опускаться
         while (!this.walls.has(downIndex) && !this.ladders.has(downIndex) && !this.pipes.has(upIndex)) {
             let downNode = this.getOrCreateNode(x, downY, nodeMap);
-            
+
             upNode.addChild(downNode);
             visited.add(upNode);
-            
+
             upNode = downNode;
             upIndex = downIndex;
 
@@ -88,27 +88,21 @@ class Environment {
     getOrCreateNode(x, y, nodeMap) {
         console.log(x, y);
         const index = getIndex(x, y, this.mapSize);
-    
+
         if (nodeMap.has(index)) {
             return nodeMap.get(index);
         }
-        
+
         const node = new Node(x, y);
         nodeMap.set(index, node);
-        
+
         return node;
     }
-    
+
     isEmpty(index) {
         return !this.walls.has(index) && !this.pipes.has(index) && !this.ladders.has(index);
     }
 }
-
-
-function getIndex(x, y, size) {
-    return y * size + x;
-}
-
 
 // env = new Environment();
 // env.mapSize = 5;
@@ -130,3 +124,5 @@ function getIndex(x, y, size) {
 //     console.log(n.x, n.y, n.children);
 //     break;
 // }
+
+module.exports.Environment = Environment;

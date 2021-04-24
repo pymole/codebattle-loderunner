@@ -1,3 +1,6 @@
+const staticObjects = require('../shared/staticObjects');
+const getXY = require('../shared/utils').getXY;
+
 class Observation {
     constructor(env) {
         this.env = env;
@@ -17,8 +20,23 @@ class Observation {
 // Здесь хранятся все наблюдения, которые должны просчитаться на тике
 // Если объект наблюдения возвращает флаг о прекращении, то удаляем его из списка наблюдений.
 
+class StaticObservation extends Observation {
+    constructor(env) {
+        super(env);
+    }
 
+    observe(board) {
+        this.env.size = Math.sqrt(board.length);
+        for(let i = 0; i < board.length; i++) {
+            board[i] === '#' && this.env.bricks.add(getXY(i, this.env.size))
+            board[i] === '☼' && this.env.walls.add(getXY(i, this.env.size))
+            staticObjects.ladder.includes(board[i]) && this.env.ladder.add(getXY(i, this.env.size))
+            staticObjects.pipe.includes(board[i]) && this.env.pipe.add(getXY(i, this.env.size))
+        }
+        return true;
+    }
+}
 
 const observations = [];
 
-module.exports = Observation;
+module.exports.StaticObservation = StaticObservation;
