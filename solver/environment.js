@@ -18,6 +18,7 @@ class Environment {
 
         this.walls = new Map();
         this.ladders = new Map();
+        this.portals = new Map();
         this.pipes = new Map();
         this.gold = new Map();
         this.hunters = new Map();

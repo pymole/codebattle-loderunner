@@ -16,7 +16,6 @@ class PlayerObservation extends Observation {
             const rightPointIndex = getIndex(hunter.x + 1, hunter.y, this.env.mapSize)
             const UpPointIndex = getIndex(hunter.x, hunter.y + 1, this.env.mapSize)
             const DownPointIndex = getIndex(hunter.x, hunter.y - 1, this.env.mapSize)
-            console.log(hunter);
 
             const indexes = [centerPointIndex, leftPointIndex, rightPointIndex, UpPointIndex, DownPointIndex]
             let indexesUpdated = [];
@@ -24,9 +23,6 @@ class PlayerObservation extends Observation {
             indexes.map((index) => {
                 if(hunterSymbols.includes(board[index])) indexesUpdated.push(index);
             })
-
-
-
 
             indexesUpdated.map((hunter) => {
                 let [x, y] = getXY(hunter, this.env.mapSize);

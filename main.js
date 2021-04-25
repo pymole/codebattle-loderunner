@@ -27,6 +27,7 @@ client.on('connect', function(connection) {
             console.log('test');
             const board = message.utf8Data.substr(6);
             staticObserver.observe(board);
+            console.log(env.portals);
             connection.sendUTF('left')
         }
     });

@@ -10,6 +10,7 @@ const playerSymbols = ['Z', ')', ')', ' : ', 'U', 'Э', 'Є', '⋈', '⋊', '⋉
 
 const ladderSymbols = ['H', '⋕', 'U', '⍬', 'Y'];
 const pipeSymbols = ['~', '{', '}', '⋜', '⋝', 'Э', 'Є', '⊣', '⊢'];
+const portalSymbol = '⊛';
 
-module.exports = {goldSymbols, heroSymbols, hunterSymbols, playerSymbols, ladderSymbols, pipeSymbols}
+module.exports = {goldSymbols, heroSymbols, hunterSymbols, playerSymbols, ladderSymbols, pipeSymbols, portalSymbol}
 

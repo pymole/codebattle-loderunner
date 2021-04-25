@@ -2,7 +2,13 @@ const Observation = require('./observation');
 const gameObjects = require('../solver/game-objects');
 
 
-const {ladderSymbols, pipeSymbols, playerSymbols, hunterSymbols, heroSymbols, goldSymbols} = require('../shared/gameSymbols')
+const {ladderSymbols,
+    pipeSymbols,
+    playerSymbols,
+    hunterSymbols,
+    heroSymbols,
+    goldSymbols,
+    portalSymbol} = require('../shared/gameSymbols')
 
 const { getXY, getIndex } = require('../shared/utils');
 
@@ -16,6 +22,7 @@ class StaticObservation extends Observation {
         this.env.mapSize = Math.sqrt(board.length);
         this.env.walls = new Map();
         this.env.ladders = new Map();
+        this.env.portals = new Map();
         this.env.pipes = new Map();
         this.env.players = new Map();
         this.env.hunters = new Map();
@@ -63,6 +70,12 @@ class StaticObservation extends Observation {
                 const [x, y] = getXY(i, this.env.mapSize);
                 const hero = new gameObjects.Hero(x, y)
                 this.env.hero = hero;
+            }
+
+            if (board[i] == portalSymbol) {
+                const [x, y] = getXY(i, this.env.mapSize);
+                const portal = new gameObjects.Teleport(x, y)
+                this.env.portals.set(i, portal);
             }
         }
 
