@@ -13,6 +13,7 @@ const {
     pillSymbol,
     wallsSymbols,
     pitSymbols,
+    playerShadowSymbols,
 } = require('../shared/gameSymbols')
 
 const { getXY, getIndex } = require('../shared/utils');
@@ -57,7 +58,7 @@ class StaticObservation extends Observation {
 
             if (playerSymbols.includes(board[i])) {
                 const [x, y] = getXY(i, this.env.mapSize);
-                const player = new gameObjects.Hero(x, y);
+                const player = new gameObjects.Hero(x, y, playerShadowSymbols.includes(board[i]));
                 this.env.players.set(i, player);
             }
 
@@ -89,12 +90,6 @@ class StaticObservation extends Observation {
                 const [x, y] = getXY(i, this.env.mapSize);
                 const pill = new gameObjects.Pill(x, y)
                 this.env.pills.set(i, pill);
-            }
-
-            if (pitSymbols.includes(board[i])) {
-                const [x, y] = getXY(i, this.env.mapSize);
-                const pit = new gameObjects.Pit(x, y)
-                this.env.pits.set(i, pit);
             }
         }
         return true;

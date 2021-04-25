@@ -65,13 +65,13 @@ client.on('connect', function(connection) {
             }
 
             const path = dijkstra(startNode, targets);
-
             if(path) {
                 const {x, y} = path[1];
 
                 const command = getCommand(hero, {x, y})
                 connection.sendUTF(command)
             }
+            connection.sendUTF('left')
         }
     });
 });

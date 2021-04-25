@@ -15,11 +15,11 @@ const heroSymbols = ['Ѡ', 'Я', 'R', 'Y', '◄', '►', ']', '[', '{', '}', '�
 
 const hunterSymbols = ['Q', '«', '»', '<', '>', 'X', 'Ѡ', 'Z', '⋈']
 const playerSymbols = ['Z', ')', '(', 'U', 'Э', 'Є', '⋈', '⋊', '⋉', '⋕', '⊣', '⊢', '⊐', '⊏']
+const playerShadowSymbols = ['⋈', '⋊', '⋉', '⋕', '⊣', '⊢', '⊐', '⊏'];
 
 const ladderSymbols = ['H', '⋕', 'U', '⍬', 'Y'];
 const pipeSymbols = ['~', '{', '}', '⋜', '⋝', 'Э', 'Є', '⊣', '⊢'];
 const portalSymbol = '⊛';
-const pitSymbols = ['*', '1', '2', '3', '4', 'X'];
 
 module.exports = {
     goldSymbols,
@@ -31,6 +31,6 @@ module.exports = {
     portalSymbol,
     pillSymbol,
     wallsSymbols,
-    pitSymbols,
+    playerShadowSymbols,
 }
 
