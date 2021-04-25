@@ -24,7 +24,6 @@ client.on('connect', function(connection) {
     });
     connection.on('message', (message) => {
         if (message.type === 'utf8') {
-            console.log('test');
             const board = message.utf8Data.substr(6);
             staticObserver.observe(board);
             console.log(env.portals);
