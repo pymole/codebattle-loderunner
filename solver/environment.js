@@ -72,6 +72,34 @@ class Environment {
             const centerLadderNode = this.ladderPattern(ladder.x, ladder.y, visited, graph);
             visited.add(centerLadderNode);
         }
+
+        /// ШТРАФЫ
+
+        // Даем штраф на соседние с охотниками клетки
+        for (const hunter in this.hunters.values()) {
+            spreadCost(
+                graph, graph.get(getIndex(hunter.x, hunter.y, this.mapSize)),
+                this.mapSize, 10, spreadHunter
+            );
+        }
+        
+        // Избегаем игроков - теней
+        for (const player in this.shadows.values()) {
+            if (player.isShadow) {
+                spreadCost(
+                    graph, graph.get(getIndex(player.x, player.y, this.mapSize)),
+                    this.mapSize, 5, spreadShadow
+                );
+            }
+        }
+
+        for (const pit in this.pits.values()) {
+            spreadCost(
+                graph, graph.get(getIndex(player.x, player.y, this.mapSize)),
+                this.mapSize, 4, spreadShadow
+            );
+        }
+
         return graph;
     }
 
@@ -129,7 +157,7 @@ class Environment {
             // Если на стороне пустота, то падаем
             if (!this.pipes.has(sideNodeIndex) && !this.ladders.has(sideNodeIndex) && !visited.has(sideNode)) {
                 this.fillFallNodes(x, y, visited, graph);
-
+                visited.add(sideNode);
             }
         }
     }
@@ -182,6 +210,57 @@ class Environment {
     }
 }
 
+
+
+function spreadCost(graph, startNode, mapSize, maxDepth, costFunc) {
+    const nodes = [[startNode, 0]];
+    const visited = new Set();
+
+    while (nodes.length > 0) {
+        const [node, depth] = nodes.pop();
+        visited.add(node);
+
+        for (const [x, y] of sides(node.x, node.y)) {
+            const sideNode = graph.get(getIndex(x, y, mapSize));
+
+            if (sideNode && sideNode.children.has(node) && depth <= maxDepth) {
+                const currentCost = sideNode.children.get(node);
+                sideNode.children.set(node, costFunc(currentCost, depth, maxDepth));
+
+                if (!visited.has(sideNode)) {
+                    nodes.push([sideNode, depth + 1]);
+                }
+            }
+        }
+    }
+}
+
+
+function spreadHunter(currentCost, depth, maxDepth) {
+    if (depth === 0) {
+        return 10000;
+    }
+
+    return currentCost + maxDepth - depth;
+}
+
+
+function spreadShadow(currentCost, depth, maxDepth) {
+    if (depth === 0) {
+        return 10000;
+    }
+
+    return currentCost + maxDepth - depth;
+}
+
+
+function spreadPit(currentCost, depth, maxDepth) {
+    if (depth === 0) {
+        return 10000;
+    }
+
+    return currentCost + maxDepth - depth;
+}
 
 // console.time('a');
 // env.createGraph()

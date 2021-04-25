@@ -29,30 +29,6 @@ function dijkstra(startNode, targetNodes) {
 }
 
 
-function spreadCost(graph, startNode, mapSize, maxDepth, costFunc) {
-    const nodes = [[startNode, 0]];
-    const visited = new Set();
-
-    while (nodes.length > 0) {
-        const [node, depth] = nodes.pop();
-        visited.add(node);
-
-        for (const [x, y] of sides(node.x, node.y)) {
-            const sideNode = graph.get(getIndex(x, y, mapSize));
-
-            if (sideNode && sideNode.children.has(node) && depth <= maxDepth) {
-                const currentCost = sideNode.children.get(node);
-                sideNode.children.set(node, costFunc(currentCost, depth, maxDepth));
-
-                if (!visited.has(sideNode)) {
-                    nodes.push([sideNode, depth + 1]);
-                }
-            }
-        }
-    }
-}
-
-
 function* sides(x, y) {
     yield [x - 1, y];
     yield [x + 1, y];
