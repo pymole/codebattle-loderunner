@@ -5,7 +5,7 @@ function dijkstra(startNode, targetNodes) {
     const visited = new Set();
     let paths = [[[startNode], 0]];
     
-    while (paths) {
+    while (paths.length > 0) {
         let [path, cost] = paths.pop();
         const currentNode = path[path.length - 1];
         if (targetNodes.has(currentNode)) {
@@ -32,16 +32,15 @@ function spreadCost(graph, startNode, mapSize, costFunc, maxDepth) {
     const nodes = [[startNode, 0]];
     const visited = new Set();
 
-    while (nodes) {
+    while (nodes.length > 0) {
         const [node, depth] = nodes.pop();
         visited.add(node);
-        
         for (const [x, y] of sides(node.x, node.y)) {
             const sideNode = graph.get(getIndex(x, y, mapSize));
 
             if (sideNode && sideNode.children.has(node) && depth <= maxDepth) {
                 const currentCost = sideNode.children.get(node);
-                sideNode.children.set(node, costFunc(currentCost, depth));
+                sideNode.children.set(node, costFunc(currentCost, depth, maxDepth));
 
                 if (!visited.has(sideNode)) {
                     nodes.push([sideNode, depth + 1]);
@@ -53,10 +52,10 @@ function spreadCost(graph, startNode, mapSize, costFunc, maxDepth) {
 
 
 function* sides(x, y) {
-    yield x - 1, y;
-    yield x + 1, y;
-    yield x, y - 1;
-    yield x, y + 1;
+    yield [x - 1, y];
+    yield [x + 1, y];
+    yield [x, y - 1];
+    yield [x, y + 1];
 }
 
 // console.log(!![]);
@@ -81,5 +80,28 @@ function* sides(x, y) {
 
 // n1 = new Node(0, 0);
 // n2 = new Node(1, 0);
-// n3 = new Node(2, 0);
-// n4 = new Node(3, 0);
+// n3 = new Node(0, 1);
+// n4 = new Node(1, 1);
+// n5 = new Node(2, 1);
+
+
+// n2.addChild(n1);
+// n3.addChild(n1);
+// n4.addChild(n3);
+// n4.addChild(n2);
+// n5.addChild(n4);
+
+
+// graph = new Map();
+
+// for (const n of [n1, n2, n3, n4, n5]) {
+//     graph.set(getIndex(n.x, n.y, 3), n);
+// }
+
+// function spreadHunter(currentCost, depth, maxDepth) {
+//     return currentCost + maxDepth - depth;
+// }
+
+// spreadCost(graph, n1, 3, spreadHunter, 2);
+
+// console.log(graph);
