@@ -36,7 +36,7 @@ class Environment {
             const aboveWallY = wall.y + 1;
             // Отсекаем стены, которые находятся по краям и над которыми не пусто
             if (wall.x < 1 || this.mapSize - 1 <= wall.x ||
-                aboveWallY < 1 || aboveWallY >= this.mapSize - 2 ||
+                aboveWallY < 1 || aboveWallY >= this.mapSize - 1 ||
                 !this.isEmpty(getIndex(wall.x, aboveWallY, this.mapSize))) {
                 // console.log('eleminated', wall.x, wall.y, );
                 continue;
@@ -178,7 +178,7 @@ class Environment {
     }
 
     isSolid(index) {
-        return !this.walls.has(index) && !this.players.has(index);
+        return this.walls.has(index) || this.players.has(index);
     }
 }
 

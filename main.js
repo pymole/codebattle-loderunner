@@ -32,19 +32,25 @@ client.on('connect', function(connection) {
             // Обсчет
             const hero = env.hero;
             const graph = env.createGraph();
+
             const startNode = graph.get(getIndex(hero.x, hero.y, env.mapSize))
             const targets = new Set();
+
 
             for (let index of env.gold.keys()) {
                 if (graph.has(index)) targets.add(graph.get(index));
             }
 
+            console.log(hero, graph, env.ladders);
             const path = dijkstra(startNode, targets);
-            const {x, y} = path[1];
 
-            const command = getCommand(hero, {x, y})
-            console.log(hero, {x, y}, command);
-            connection.sendUTF(command)
+            if(path) {
+                const {x, y} = path[1];
+
+                const command = getCommand(hero, {x, y})
+                connection.sendUTF(command)
+            }
+            connection.sendUTF('left')
         }
     });
 });

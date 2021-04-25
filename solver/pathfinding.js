@@ -4,7 +4,7 @@ const {getIndex} = require('../shared/utils.js');
 function dijkstra(startNode, targetNodes) {
     const visited = new Set();
     let paths = [[[startNode], 0]];
-    
+
     while (paths.length > 0) {
         let [path, cost] = paths.pop();
         const currentNode = path[path.length - 1];
@@ -25,6 +25,7 @@ function dijkstra(startNode, targetNodes) {
 
         paths.sort((a, b) => a[1] - b[1]);
     }
+    throw new Error();
 }
 
 
