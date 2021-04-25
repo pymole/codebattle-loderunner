@@ -1,10 +1,9 @@
 const WebSocketClient = require('websocket').client;
 const StaticObservation = require('./observer/StaticObservation')
-const {getIndex} = require('./shared/utils');
+const {getIndex, getCommand} = require('./shared/utils');
 const {dijkstra} = require('./solver/pathfinding');
-const commands = require('./shared/commands');
+const {Environment} = require('./solver/environment');
 
-const Environment = require('./solver/environment').Environment
 const url = 'wss://dojorena.io/codenjoy-contest/ws?user=dojorena489&code=3820819539230199797';
 const client = new WebSocketClient();
 
@@ -43,16 +42,8 @@ client.on('connect', function(connection) {
             const path = dijkstra(startNode, targets);
             const {x, y} = path[1];
 
-            let command;
-            if (hero.x > x)
-                command = commands.left;
-            else if (hero.x < x)
-                command = commands.right;
-            else if (hero.y < y)
-                command = commands.up;
-            else (hero.y > y)
-                command = commands.down;
-
+            const command = getCommand(hero, {x, y})
+            console.log(hero, {x, y}, command);
             connection.sendUTF(command)
         }
     });
