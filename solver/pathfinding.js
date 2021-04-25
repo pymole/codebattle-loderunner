@@ -4,8 +4,8 @@ const {getIndex} = require('../shared/utils.js');
 function dijkstra(startNode, targetNodes) {
     const visited = new Set();
     let paths = [[[startNode], 0]];
-    
-    while (paths) {
+
+    while (paths.length > 0) {
         let [path, cost] = paths.pop();
         const currentNode = path[path.length - 1];
         if (targetNodes.has(currentNode)) {
@@ -13,7 +13,7 @@ function dijkstra(startNode, targetNodes) {
         }
 
         visited.add(currentNode);
-        
+
         for (const [child, transitionCost] of currentNode.children.entries()) {
             if (visited.has(child)) continue;
 
@@ -35,7 +35,7 @@ function spreadCost(graph, startNode, mapSize, costFunc, maxDepth) {
     while (nodes) {
         const [node, depth] = nodes.pop();
         visited.add(node);
-        
+
         for (const [x, y] of sides(node.x, node.y)) {
             const sideNode = graph.get(getIndex(x, y, mapSize));
 
@@ -58,6 +58,8 @@ function* sides(x, y) {
     yield x, y - 1;
     yield x, y + 1;
 }
+
+module.exports = {dijkstra}
 
 // console.log(!![]);
 
