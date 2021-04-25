@@ -1,7 +1,8 @@
 const Observation = require('./observation');
-const gameObjects = require('../solver/game-objects');
+const {Point, Hunter} = require('../solver/game-objects');
 const {getXY, getIndex} = require('../shared/utils');
 const playerSymbols = require('../shared/otherPlayer');
+const hunterSymbols = require('../shared/hunter');
 
 class PlayerObservation extends Observation {
     constructor(env) {
@@ -9,14 +10,33 @@ class PlayerObservation extends Observation {
     }
 
     observe(board) {
-        for (let i = 0; i < board.length; i++) {
-            if (playerSymbols.includes(board[i])) {
-                const [x, y] = getXY(i, this.env.mapSize);
-                y = this.env.mapSize - y - 1;
-                const player = new gameObjects.Hero(x, y);
-                this.env.players.set(getIndex(x, y, this.env.mapSize), player);
-            }
+        const newHunters = new Map();
+        for (let hunter of this.env.hunters.values()) {
+            const centerPointIndex = getIndex(hunter.x, hunter.y, this.env.mapSize)
+            const leftPointIndex = getIndex(hunter.x - 1, hunter.y, this.env.mapSize)
+            const rightPointIndex = getIndex(hunter.x + 1, hunter.y, this.env.mapSize)
+            const UpPointIndex = getIndex(hunter.x, hunter.y + 1, this.env.mapSize)
+            const DownPointIndex = getIndex(hunter.x, hunter.y - 1, this.env.mapSize)
+            console.log(hunter);
+
+            const indexes = [centerPointIndex, leftPointIndex, rightPointIndex, UpPointIndex, DownPointIndex]
+            let indexesUpdated = [];
+
+            indexes.map((index) => {
+                if(hunterSymbols.includes(board[index])) indexesUpdated.push(index);
+            })
+
+
+
+
+            indexesUpdated.map((hunter) => {
+                let [x, y] = getXY(hunter, this.env.mapSize);
+                const newHunter = new Hunter(x, y);
+                newHunters.set(indexesUpdated, newHunter);
+            })
         }
+
+        this.env.hunters = newHunters;
     }
 }
 

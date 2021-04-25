@@ -43,9 +43,9 @@ class Hunter extends Point  {
 
 
 class Gold extends Point  {
-    constructor(x, y, type) {
+    constructor(x, y, value) {
         super(x, y);
-        this.type = type;
+        this.value = value;
     }
 }
 

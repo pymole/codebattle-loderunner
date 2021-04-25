@@ -1,7 +1,7 @@
 const goldSymbols = new Map([
-    ['$', 'Y'],
-    ['&', 'G'],
-    ['@', 'R'],
+    ['$', 3],
+    ['&', 1],
+    ['@', 5],
 ]);
 
 module.exports = goldSymbols;
