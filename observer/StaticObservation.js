@@ -2,13 +2,16 @@ const Observation = require('./observation');
 const gameObjects = require('../solver/game-objects');
 
 
-const {ladderSymbols,
+const {
+    ladderSymbols,
     pipeSymbols,
     playerSymbols,
     hunterSymbols,
     heroSymbols,
     goldSymbols,
-    portalSymbol} = require('../shared/gameSymbols')
+    portalSymbol,
+    pillSymbol,
+} = require('../shared/gameSymbols')
 
 const { getXY, getIndex } = require('../shared/utils');
 
@@ -20,13 +23,14 @@ class StaticObservation extends Observation {
 
     observe(board) {
         this.env.mapSize = Math.sqrt(board.length);
-        this.env.walls = new Map();
-        this.env.ladders = new Map();
-        this.env.portals = new Map();
-        this.env.pipes = new Map();
-        this.env.players = new Map();
-        this.env.hunters = new Map();
-        this.env.gold = new Map();
+        this.env.walls.clear()
+        this.env.ladders.clear()
+        this.env.portals.clear()
+        this.env.pipes.clear()
+        this.env.players.clear()
+        this.env.hunters.clear()
+        this.env.gold.clear()
+        this.env.pills.clear()
 
         for (let i = 0; i < board.length; i++) {
             // У нас перевернутая карта (y = 0 - это внизу)
@@ -76,6 +80,12 @@ class StaticObservation extends Observation {
                 const [x, y] = getXY(i, this.env.mapSize);
                 const portal = new gameObjects.Teleport(x, y)
                 this.env.portals.set(i, portal);
+            }
+
+            if (board[i] == pillSymbol) {
+                const [x, y] = getXY(i, this.env.mapSize);
+                const pill = new gameObjects.Pill(x, y)
+                this.env.pills.set(i, pill);
             }
         }
 

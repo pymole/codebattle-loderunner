@@ -4,6 +4,8 @@ const goldSymbols = new Map([
     ['@', 5],
 ]);
 
+const pillSymbol = 'S';
+
 const heroSymbols = ['Ѡ', 'Я', 'R', 'Y', '◄', '►', ']', '[', '{', '⊰', '⊱', '⍬', '⊲', '⊳', '⊅', '⊄', '⋜', '⋝']
 const hunterSymbols = ['Q', '«', '»', '<', '>', 'X', 'Ѡ', 'Z', '⋈']
 const playerSymbols = ['Z', ')', ')', ' : ', 'U', 'Э', 'Є', '⋈', '⋊', '⋉', '⋕', '⊣', '⊢', '⊐', '⊏']
@@ -12,5 +14,14 @@ const ladderSymbols = ['H', '⋕', 'U', '⍬', 'Y'];
 const pipeSymbols = ['~', '{', '}', '⋜', '⋝', 'Э', 'Є', '⊣', '⊢'];
 const portalSymbol = '⊛';
 
-module.exports = {goldSymbols, heroSymbols, hunterSymbols, playerSymbols, ladderSymbols, pipeSymbols, portalSymbol}
+module.exports = {
+    goldSymbols,
+    heroSymbols,
+    hunterSymbols,
+    playerSymbols,
+    ladderSymbols,
+    pipeSymbols,
+    portalSymbol,
+    pillSymbol
+}
 
