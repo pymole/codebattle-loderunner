@@ -85,6 +85,12 @@ class StaticObservation extends Observation {
                 this.env.portals.set(i, portal);
             }
 
+            if (pillSymbol.includes(board[i])) {
+                const [x, y] = getXY(i, this.env.mapSize);
+                const pill = new gameObjects.Pill(x, y)
+                this.env.pills.set(i, pill);
+            }
+
             if (pitSymbols.includes(board[i])) {
                 const [x, y] = getXY(i, this.env.mapSize);
                 const pit = new gameObjects.Pit(x, y)
