@@ -91,7 +91,6 @@ class StaticObservation extends Observation {
                 this.env.pits.set(i, pit);
             }
         }
-
         return true;
     }
 }
