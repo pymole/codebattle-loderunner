@@ -12,7 +12,11 @@ const playerSymbols = ['Z', ')', ')', ' : ', 'U', 'Э', 'Є', '⋈', '⋊', '⋉
 
 const ladderSymbols = ['H', '⋕', 'U', '⍬', 'Y'];
 const pipeSymbols = ['~', '{', '}', '⋜', '⋝', 'Э', 'Є', '⊣', '⊢'];
+const wallsSymbols = ['#', '☼'];
 const portalSymbol = '⊛';
+const pitSymbols = ['*', '1', '2', '3', '4', 'X'];
+
+
 
 module.exports = {
     goldSymbols,
@@ -22,6 +26,8 @@ module.exports = {
     ladderSymbols,
     pipeSymbols,
     portalSymbol,
-    pillSymbol
+    pillSymbol,
+    wallsSymbols,
+    pitSymbols,
 }
 

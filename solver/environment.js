@@ -24,6 +24,7 @@ class Environment {
         this.hunters = new Map();
         this.players = new Map();
         this.pills = new Map();
+        this.pits = new Map();
         this.hero = {};
     }
 

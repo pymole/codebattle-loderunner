@@ -13,6 +13,12 @@ class Wall extends Point {
     }
 }
 
+class Pit extends Point {
+    constructor(x, y, isDestructible) {
+        super(x, y);
+    }
+}
+
 
 class Pipe extends Point {
     constructor(x, y) {
@@ -63,4 +69,4 @@ class Teleport extends Point  {
     }
 }
 
-module.exports = {Point, Wall, Pipe, Ladder, Hero, Hunter, Gold, Pill, Teleport};
+module.exports = {Point, Wall, Pipe, Ladder, Hero, Hunter, Gold, Pill, Teleport, Pit};

@@ -1,10 +1,8 @@
 const WebSocketClient = require('websocket').client;
 const StaticObservation = require('./observer/StaticObservation')
-const GoldObservation = require('./observer/GoldObservation');
 
 const Environment = require('./solver/environment').Environment
 const url = 'wss://dojorena.io/codenjoy-contest/ws?user=dojorena489&code=3820819539230199797';
-const boardRegex = /board=/;
 const client = new WebSocketClient();
 
 const env = new Environment()
@@ -15,6 +13,7 @@ client.on('connectFailed', function(error) {
 });
 
 client.on('connect', function(connection) {
+
     console.log('WebSocket Client Connected');
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
