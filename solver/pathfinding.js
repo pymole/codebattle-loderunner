@@ -28,7 +28,7 @@ function dijkstra(startNode, targetNodes) {
 }
 
 
-function spreadCost(graph, startNode, mapSize, costFunc, maxDepth) {
+function spreadCost(graph, startNode, mapSize, maxDepth, costFunc) {
     const nodes = [[startNode, 0]];
     const visited = new Set();
 

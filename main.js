@@ -26,27 +26,32 @@ client.on('connect', function(connection) {
     });
     connection.on('message', (message) => {
         if (message.type === 'utf8') {
+            // Парсинг
             const board = message.utf8Data.substr(6);
             staticObserver.observe(board);
+
+            // Обсчет
             const hero = env.hero;
-
-
             const graph = env.createGraph();
             const startNode = graph.get(getIndex(hero.x, hero.y, env.mapSize))
             const targets = new Set();
 
-            for (let item of env.gold.keys()) {
-                graph.has(item) && targets.add(graph.get(item));
+            for (let index of env.gold.keys()) {
+                if (graph.has(index)) targets.add(graph.get(index));
             }
 
-            const path = dijkstra(startNode, targets)
+            const path = dijkstra(startNode, targets);
             const {x, y} = path[1];
 
             let command;
-            if (hero.x > x) command = commands.left;
-            if (hero.x < x) command = commands.right;
-            if (hero.y > y) command = commands.up;
-            if (hero.y < y) command = commands.down;
+            if (hero.x > x)
+                command = commands.left;
+            else if (hero.x < x)
+                command = commands.right;
+            else if (hero.y < y)
+                command = commands.up;
+            else (hero.y > y)
+                command = commands.down;
 
             connection.sendUTF(command)
         }
