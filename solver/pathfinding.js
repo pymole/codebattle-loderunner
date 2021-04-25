@@ -8,7 +8,7 @@ function dijkstra(startNode, targetNodes) {
     while (paths.length > 0) {
         let [path, cost] = paths.pop();
         const currentNode = path[path.length - 1];
-        if(!currentNode) console.log(path);
+        if(!currentNode) console.log(path, startNode);
         if (targetNodes.has(currentNode)) {
             return path;
         }

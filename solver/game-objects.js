@@ -14,10 +14,11 @@ class Wall extends Point {
 }
 
 class Pit extends Point {
-    constructor(x, y, isDestructible) {
+    constructor(x, y, time) {
         super(x, y);
+        this.time = time
     }
-}
+;}
 
 
 class Pipe extends Point {
@@ -35,8 +36,9 @@ class Ladder extends Point {
 
 
 class Hero extends Point {
-    constructor(x, y) {
+    constructor(x, y, isShadow) {
         super(x, y);
+        this.isShadow = isShadow;
     }
 }
 
