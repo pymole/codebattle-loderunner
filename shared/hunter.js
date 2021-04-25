@@ -1,4 +1,4 @@
-const hunterSymbols = ['Q', '«', '»', '<', '>', 'X', 'Ѡ', 'Z']
+const hunterSymbols = ['Q', '«', '»', '<', '>', 'X', 'Ѡ', 'Z', '⋈']
 
 module.exports = hunterSymbols;
 

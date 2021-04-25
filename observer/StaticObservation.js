@@ -4,6 +4,7 @@ const gameObjects = require('../solver/game-objects');
 const playerSymbols = require('../shared/otherPlayer');
 const hunterSymbols = require('../shared/hunter');
 const goldSymbol = require('../shared/gold');
+const heroSymbols = require('../shared/hero');
 const { getXY, getIndex } = require('../shared/utils');
 
 
@@ -14,6 +15,12 @@ class StaticObservation extends Observation {
 
     observe(board) {
         this.env.mapSize = Math.sqrt(board.length);
+        this.env.walls = new Map();
+        this.env.ladders = new Map();
+        this.env.pipes = new Map();
+        this.env.players = new Map();
+        this.env.hunters = new Map();
+        this.env.gold = new Map();
 
         for (let i = 0; i < board.length; i++) {
             // У нас перевернутая карта (y = 0 - это внизу)
@@ -51,6 +58,12 @@ class StaticObservation extends Observation {
                 const [x, y] = getXY(i, this.env.mapSize);
                 const gold = new gameObjects.Gold(x, y, goldSymbol.get(board[i]))
                 this.env.gold.set(i, gold);
+            }
+
+            if (heroSymbols.includes(board[i])) {
+                const [x, y] = getXY(i, this.env.mapSize);
+                const hero = new gameObjects.Hero(x, y)
+                this.env.hero = hero;
             }
         }
 
