@@ -23,7 +23,7 @@ function dijkstra(startNode, targetNodes) {
             paths.push([newPath, newCost]);
         }
 
-        paths.sort((a, b) => a[1] - b[1]);
+        paths.sort((a, b) => b[1] - a[1]);
     }
     throw new Error();
 }

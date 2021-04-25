@@ -9,6 +9,8 @@ const client = new WebSocketClient();
 
 const env = new Environment()
 const staticObserver = new StaticObservation(env);
+let heroChill;
+let countHeroChill = 0;
 
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
@@ -31,6 +33,21 @@ client.on('connect', function(connection) {
 
             // Обсчет
             const hero = env.hero;
+
+
+            if(heroChill && hero.x === heroChill.x && hero.y === heroChill.y) {
+                countHeroChill++;
+                if(countHeroChill > 2) {
+                    connection.sendUTF('act(0)')
+                    countHeroChill = 0;
+                    return;
+                }
+            }
+            heroChill = hero;
+
+
+
+
             const graph = env.createGraph();
 
             const startNode = graph.get(getIndex(hero.x, hero.y, env.mapSize))
@@ -41,8 +58,8 @@ client.on('connect', function(connection) {
                 if (graph.has(index)) targets.add(graph.get(index));
             }
 
-            console.log(hero, graph, env.ladders);
             const path = dijkstra(startNode, targets);
+            console.log(path);
 
             if(path) {
                 const {x, y} = path[1];
@@ -50,7 +67,6 @@ client.on('connect', function(connection) {
                 const command = getCommand(hero, {x, y})
                 connection.sendUTF(command)
             }
-            connection.sendUTF('left')
         }
     });
 });
