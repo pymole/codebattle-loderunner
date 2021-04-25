@@ -4,11 +4,11 @@ const { getIndex } = require('../shared/utils');
 class Node extends Point {
     constructor(x, y) {
         super(x, y);
-        this.children = [];
+        this.children = new Map();
     }
 
     addChild(node) {
-        this.children.push(node);
+        this.children.set(node, 0);
     }
 }
 
@@ -25,7 +25,7 @@ class Environment {
     }
 
     createGraph() {
-        const nodeMap = new Map();
+        const graph = new Map();
         const visited = new Set();
 
         for (const wall of this.walls.values()) {
@@ -40,60 +40,60 @@ class Environment {
 
             // console.log(wall);
 
-            const aboveWallNode = this.aboveWallPattern(wall.x, aboveWallY, visited, nodeMap);
+            const aboveWallNode = this.aboveWallPattern(wall.x, aboveWallY, visited, graph);
             visited.add(aboveWallNode);
         }
 
         for (const pipe of this.pipes.values()) {
             // console.log('pipe', pipe);
-            const centerPipeNode = this.pipePattern(pipe.x, pipe.y, visited, nodeMap);
+            const centerPipeNode = this.pipePattern(pipe.x, pipe.y, visited, graph);
             visited.add(centerPipeNode);
         }
 
         for (const ladder of this.ladders.values()) {
             // console.log('ladder', ladder);
-            const centerLadderNode = this.ladderPattern(ladder.x, ladder.y, visited, nodeMap);
+            const centerLadderNode = this.ladderPattern(ladder.x, ladder.y, visited, graph);
             visited.add(centerLadderNode);
         }
-        return nodeMap;
+        return graph;
     }
 
-    aboveWallPattern(aboveWallX, aboveWallY, visited, nodeMap) {
+    aboveWallPattern(aboveWallX, aboveWallY, visited, graph) {
         // console.log(aboveWallX, aboveWallY);
-        const centerNode = this.getOrCreateNode(aboveWallX, aboveWallY, nodeMap);
+        const centerNode = this.getOrCreateNode(aboveWallX, aboveWallY, graph);
 
-        this.linkNodeToSideNodes(centerNode, aboveWallX - 1, aboveWallY, visited, nodeMap);
-        this.linkNodeToSideNodes(centerNode, aboveWallX + 1, aboveWallY, visited, nodeMap);
+        this.linkNodeToSideNodes(centerNode, aboveWallX - 1, aboveWallY, visited, graph);
+        this.linkNodeToSideNodes(centerNode, aboveWallX + 1, aboveWallY, visited, graph);
 
         return centerNode;
     }
 
 
-    pipePattern(pipeX, pipeY, visited, nodeMap) {
+    pipePattern(pipeX, pipeY, visited, graph) {
 
-        const pipeNode = this.aboveWallPattern(pipeX, pipeY, visited, nodeMap);
+        const pipeNode = this.aboveWallPattern(pipeX, pipeY, visited, graph);
 
         // Также можно спрыгнуть вниз
-        this.linkNodeToSideNodes(pipeNode, pipeX, pipeY - 1, visited, nodeMap);
+        this.linkNodeToSideNodes(pipeNode, pipeX, pipeY - 1, visited, graph);
 
         return pipeNode;
     }
 
-    ladderPattern(ladderX, ladderY, visited, nodeMap) {
+    ladderPattern(ladderX, ladderY, visited, graph) {
 
-        const centerNode = this.pipePattern(ladderX, ladderY, visited, nodeMap);
+        const centerNode = this.pipePattern(ladderX, ladderY, visited, graph);
 
         const aboveLadderY = ladderY + 1;
         const aboveLadderIndex = getIndex(ladderX, aboveLadderY, this.mapSize);
 
         // Соединяем лестницу с верхушкой, если там не стена
         if (!this.walls.has(aboveLadderIndex)) {
-            const aboveLadderNode = this.getOrCreateNode(ladderX, aboveLadderY, nodeMap);
+            const aboveLadderNode = this.getOrCreateNode(ladderX, aboveLadderY, graph);
             centerNode.addChild(aboveLadderNode);
 
             // Если наверху пустота, то сверху запускаем такой же паттерн, как и у труб
             if (!this.pipes.has(aboveLadderIndex) && !this.ladders.has(aboveLadderIndex) && !visited.has(aboveLadderNode)) {
-                this.pipePattern(ladderX, aboveLadderY, visited, nodeMap);
+                this.pipePattern(ladderX, aboveLadderY, visited, graph);
                 visited.add(aboveLadderNode);
             }
         }
@@ -101,26 +101,26 @@ class Environment {
         return centerNode;
     }
 
-    linkNodeToSideNodes(node, x, y, visited, nodeMap) {
+    linkNodeToSideNodes(node, x, y, visited, graph) {
         // Боковые узлы - это те, с которых можно упасть. Право, лево, низ
 
         // Соединяемся с соседом, если там не стена
         const sideNodeIndex = getIndex(x, y, this.mapSize);
 
         if (!this.walls.has(sideNodeIndex)) {
-            const sideNode = this.getOrCreateNode(x, y, nodeMap);
+            const sideNode = this.getOrCreateNode(x, y, graph);
             node.addChild(sideNode);
             // Если на стороне пустота, то падаем
             if (!this.pipes.has(sideNodeIndex) && !this.ladders.has(sideNodeIndex) && !visited.has(sideNode)) {
-                this.fillFallNodes(x, y, visited, nodeMap);
+                this.fillFallNodes(x, y, visited, graph);
                 visited.add(sideNode);
             }
         }
     }
 
-    fillFallNodes(x, upY, visited, nodeMap) {
+    fillFallNodes(x, upY, visited, graph) {
         let upIndex = getIndex(x, upY, this.mapSize);
-        let upNode = nodeMap.get(upIndex);
+        let upNode = graph.get(upIndex);
         // console.log(visited.has(upNode));
 
         let downY = upY - 1;
@@ -128,7 +128,7 @@ class Environment {
 
         // Если под узлом нет земли и лестницы, а также узел не на трубе, то продолжаем опускаться
         while (!this.walls.has(downIndex) && !this.ladders.has(downIndex) && !this.pipes.has(upIndex)) {
-            let downNode = this.getOrCreateNode(x, downY, nodeMap);
+            let downNode = this.getOrCreateNode(x, downY, graph);
 
             upNode.addChild(downNode);
             visited.add(upNode);
@@ -142,16 +142,16 @@ class Environment {
         // console.log('fall end');
     }
 
-    getOrCreateNode(x, y, nodeMap) {
+    getOrCreateNode(x, y, graph) {
         // console.log(x, y);
         const index = getIndex(x, y, this.mapSize);
 
-        if (nodeMap.has(index)) {
-            return nodeMap.get(index);
+        if (graph.has(index)) {
+            return graph.get(index);
         }
 
         const node = new Node(x, y);
-        nodeMap.set(index, node);
+        graph.set(index, node);
 
         return node;
     }
@@ -170,4 +170,4 @@ class Environment {
 // }
 // console.timeEnd('a');
 
-module.exports.Environment = Environment;
+module.exports = {Node, Environment};
