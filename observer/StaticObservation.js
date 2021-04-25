@@ -1,10 +1,9 @@
 const Observation = require('./observation');
-const staticObjects = require('../shared/staticObjects');
 const gameObjects = require('../solver/game-objects');
-const playerSymbols = require('../shared/otherPlayer');
-const hunterSymbols = require('../shared/hunter');
-const goldSymbol = require('../shared/gold');
-const heroSymbols = require('../shared/hero');
+
+
+const {ladderSymbols, pipeSymbols, playerSymbols, hunterSymbols, heroSymbols, goldSymbols} = require('../shared/gameSymbols')
+
 const { getXY, getIndex } = require('../shared/utils');
 
 
@@ -30,13 +29,13 @@ class StaticObservation extends Observation {
                 this.env.walls.set(i, wall);
             }
 
-            if (staticObjects.ladder.includes(board[i])) {
+            if (ladderSymbols.includes(board[i])) {
                 let [x, y] = getXY(i, this.env.mapSize);
                 const ladder = new gameObjects.Ladder(x, y);
                 this.env.ladders.set(i, ladder);
             }
 
-            if (staticObjects.pipe.includes(board[i])) {
+            if (pipeSymbols.includes(board[i])) {
                 let [x, y] = getXY(i, this.env.mapSize);
                 const pipe = new gameObjects.Pipe(x, y);
                 this.env.pipes.set(i, pipe);
@@ -54,9 +53,9 @@ class StaticObservation extends Observation {
                 this.env.hunters.set(i, hunter);
             }
 
-            if (goldSymbol.has(board[i])) {
+            if (goldSymbols.has(board[i])) {
                 const [x, y] = getXY(i, this.env.mapSize);
-                const gold = new gameObjects.Gold(x, y, goldSymbol.get(board[i]))
+                const gold = new gameObjects.Gold(x, y, goldSymbols.get(board[i]))
                 this.env.gold.set(i, gold);
             }
 

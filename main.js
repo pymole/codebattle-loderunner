@@ -28,7 +28,6 @@ client.on('connect', function(connection) {
             const board = message.utf8Data.substr(6);
             staticObserver.observe(board);
             connection.sendUTF('left')
-            console.log(env.hero);
         }
     });
 });

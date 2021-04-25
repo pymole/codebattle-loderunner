@@ -1,8 +1,7 @@
 const Observation = require('./observation');
 const {Point, Hunter} = require('../solver/game-objects');
 const {getXY, getIndex} = require('../shared/utils');
-const playerSymbols = require('../shared/otherPlayer');
-const hunterSymbols = require('../shared/hunter');
+const {playerSymbols, hunterSymbols} = require('../shared/gameSymbols');
 
 class PlayerObservation extends Observation {
     constructor(env) {

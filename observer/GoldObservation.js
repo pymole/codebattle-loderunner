@@ -1,7 +1,7 @@
 const Observation = require('./observation');
 const gameObjects = require('../solver/game-objects');
 const {getXY} = require('../shared/utils');
-const goldSymbol = require('../shared/gold');
+const {goldSymbols} = require('../shared/gameSymbols');
 
 class GoldObservation extends Observation {
     constructor(env) {
@@ -10,9 +10,9 @@ class GoldObservation extends Observation {
 
     observe(board) {
         for (let i = 0; i < board.length; i++) {
-            if (goldSymbol.has(board[i])) {
+            if (goldSymbols.has(board[i])) {
                 const [x, y] = getXY(i, this.env.mapSize);
-                const gold = new gameObjects.Gold(x, y, goldSymbol.get(board[i]))
+                const gold = new gameObjects.Gold(x, y, goldSymbols.get(board[i]))
                 this.env.gold.set(i, gold);
             }
         }
