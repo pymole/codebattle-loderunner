@@ -4,6 +4,11 @@ const goldSymbols = new Map([
     ['@', 5],
 ]);
 
+const wallsSymbols = new Map([
+    ['#', true],
+    ['☼', false],
+]);
+
 const pillSymbol = 'S';
 
 const heroSymbols = ['Ѡ', 'Я', 'R', 'Y', '◄', '►', ']', '[', '{', '⊰', '⊱', '⍬', '⊲', '⊳', '⊅', '⊄', '⋜', '⋝']
@@ -12,7 +17,6 @@ const playerSymbols = ['Z', ')', ')', ' : ', 'U', 'Э', 'Є', '⋈', '⋊', '⋉
 
 const ladderSymbols = ['H', '⋕', 'U', '⍬', 'Y'];
 const pipeSymbols = ['~', '{', '}', '⋜', '⋝', 'Э', 'Є', '⊣', '⊢'];
-const wallsSymbols = ['#', '☼'];
 const portalSymbol = '⊛';
 const pitSymbols = ['*', '1', '2', '3', '4', 'X'];
 

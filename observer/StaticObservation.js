@@ -37,9 +37,9 @@ class StaticObservation extends Observation {
 
         for (let i = 0; i < board.length; i++) {
             // У нас перевернутая карта (y = 0 - это внизу)
-            if (wallsSymbols.includes(board[i])) {
+            if (wallsSymbols.has(board[i])) {
                 let [x, y] = getXY(i, this.env.mapSize);
-                const wall = new gameObjects.Wall(x, y, board[i] === '#');
+                const wall = new gameObjects.Wall(x, y, wallsSymbols.get(board[i]));
                 this.env.walls.set(i, wall);
             }
 
