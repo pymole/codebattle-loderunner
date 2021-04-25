@@ -48,6 +48,19 @@ class Environment {
             visited.add(aboveWallNode);
         }
 
+        for (const player of this.players.values()) {
+            const abovePlayerY = player.y + 1;
+            if (!this.isEmpty(getIndex(player.x, abovePlayerY, this.mapSize))) {
+                // console.log('eleminated', wall.x, wall.y, );
+                continue;
+            }
+
+            // console.log(wall);
+
+            const abovePlayerNode = this.aboveWallPattern(player.x, abovePlayerY, visited, graph);
+            visited.add(abovePlayerNode);
+        }
+
         for (const pipe of this.pipes.values()) {
             // console.log('pipe', pipe);
             const centerPipeNode = this.pipePattern(pipe.x, pipe.y, visited, graph);
@@ -72,7 +85,6 @@ class Environment {
         return centerNode;
     }
 
-
     pipePattern(pipeX, pipeY, visited, graph) {
 
         const pipeNode = this.aboveWallPattern(pipeX, pipeY, visited, graph);
@@ -90,8 +102,8 @@ class Environment {
         const aboveLadderY = ladderY + 1;
         const aboveLadderIndex = getIndex(ladderX, aboveLadderY, this.mapSize);
 
-        // Соединяем лестницу с верхушкой, если там не стена
-        if (!this.walls.has(aboveLadderIndex)) {
+        // Соединяем лестницу с верхушкой, если там не солид
+        if (!this.isSolid(aboveLadderIndex)) {
             const aboveLadderNode = this.getOrCreateNode(ladderX, aboveLadderY, graph);
             centerNode.addChild(aboveLadderNode);
 
@@ -111,7 +123,7 @@ class Environment {
         // Соединяемся с соседом, если там не стена
         const sideNodeIndex = getIndex(x, y, this.mapSize);
 
-        if (!this.walls.has(sideNodeIndex)) {
+        if (!this.isSolid(sideNodeIndex)) {
             const sideNode = this.getOrCreateNode(x, y, graph);
             node.addChild(sideNode);
             // Если на стороне пустота, то падаем
@@ -130,8 +142,8 @@ class Environment {
         let downY = upY - 1;
         let downIndex = getIndex(x, downY, this.mapSize);
 
-        // Если под узлом нет земли и лестницы, а также узел не на трубе, то продолжаем опускаться
-        while (!this.walls.has(downIndex) && !this.ladders.has(downIndex) && !this.pipes.has(upIndex)) {
+        // Если под узлом нет твердой поверхности и лестницы, а также узел не на трубе, то продолжаем опускаться
+        while (!this.isSolid(downIndex) && !this.ladders.has(downIndex) && !this.pipes.has(upIndex)) {
             let downNode = this.getOrCreateNode(x, downY, graph);
 
             upNode.addChild(downNode);
@@ -162,7 +174,11 @@ class Environment {
 
     isEmpty(index) {
         // console.log(getXY(index, this.mapSize), !this.walls.has(index), !this.pipes.has(index), !this.ladders.has(index));
-        return !this.walls.has(index) && !this.pipes.has(index) && !this.ladders.has(index);
+        return !this.isSolid(index) && !this.pipes.has(index) && !this.ladders.has(index);
+    }
+
+    isSolid(index) {
+        return !this.walls.has(index) && !this.players.has(index);
     }
 }
 
