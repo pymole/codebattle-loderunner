@@ -31,18 +31,24 @@ client.on('connect', function(connection) {
             const board = message.utf8Data.substr(6);
             staticObserver.observe(board);
 
+
+
             // Обсчет
             const hero = env.hero;
+            console.log(hero, 'hueta askgjapewoigjapoiwg');
 
-
+            // Если перс застрял, то суисайд
             if(heroChill && hero.x === heroChill.x && hero.y === heroChill.y) {
                 countHeroChill++;
+                console.log('stop', countHeroChill)
                 if(countHeroChill > 2) {
                     connection.sendUTF('act(0)')
                     countHeroChill = 0;
                     return;
                 }
             }
+
+            else heroChill = 0;
             heroChill = hero;
 
 
@@ -59,7 +65,6 @@ client.on('connect', function(connection) {
             }
 
             const path = dijkstra(startNode, targets);
-            console.log(path);
 
             if(path) {
                 const {x, y} = path[1];

@@ -12,6 +12,7 @@ const wallsSymbols = new Map([
 const pillSymbol = 'S';
 
 const heroSymbols = ['Ѡ', 'Я', 'R', 'Y', '◄', '►', ']', '[', '{', '}', '⊰', '⊱', '⍬', '⊲', '⊳', '⊅', '⊄', '⋜', '⋝']
+
 const hunterSymbols = ['Q', '«', '»', '<', '>', 'X', 'Ѡ', 'Z', '⋈']
 const playerSymbols = ['Z', ')', '(', 'U', 'Э', 'Є', '⋈', '⋊', '⋉', '⋕', '⊣', '⊢', '⊐', '⊏']
 

@@ -109,7 +109,6 @@ class Environment {
 
             // Если наверху пустота, то сверху запускаем такой же паттерн, как и у труб
             if (!this.pipes.has(aboveLadderIndex) && !this.ladders.has(aboveLadderIndex) && !visited.has(aboveLadderNode)) {
-                console.log('sosi hui')
                 this.pipePattern(ladderX, aboveLadderY, visited, graph);
                 visited.add(aboveLadderNode);
             }
