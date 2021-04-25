@@ -15,13 +15,17 @@ class Node extends Point {
 class Environment {
     constructor() {
         this.mapSize = 0;
-        
+
         this.walls = new Map();
         this.ladders = new Map();
+        this.portals = new Map();
         this.pipes = new Map();
         this.gold = new Map();
         this.hunters = new Map();
         this.players = new Map();
+        this.pills = new Map();
+        this.pits = new Map();
+        this.hero = {};
     }
 
     createGraph() {
@@ -156,7 +160,7 @@ class Environment {
         return node;
     }
 
-    isEmpty(index) {     
+    isEmpty(index) {
         // console.log(getXY(index, this.mapSize), !this.walls.has(index), !this.pipes.has(index), !this.ladders.has(index));
         return !this.walls.has(index) && !this.pipes.has(index) && !this.ladders.has(index);
     }
