@@ -18,8 +18,8 @@ function dijkstra(startNode, targetNodes) {
         for (const [child, transitionCost] of currentNode.children.entries()) {
             if (visited.has(child)) continue;
 
-            newPath = [...path, child];
-            newCost = cost + transitionCost + 1;
+            const newPath = [...path, child];
+            const newCost = cost + transitionCost + 1;
 
             paths.push([newPath, newCost]);
         }
@@ -34,7 +34,7 @@ function spreadCost(graph, startNode, mapSize, costFunc, maxDepth) {
     const visited = new Set();
 
     while (nodes) {
-        const [node, level] = nodes.pop();
+        const [node, depth] = nodes.pop();
         visited.add(node);
         
         for (const [x, y] of sides(node.x, node.y)) {
