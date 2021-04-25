@@ -1,4 +1,3 @@
-const {Node} = require('./environment.js');
 const {getIndex} = require('../shared/utils.js');
 
 
@@ -8,7 +7,7 @@ function dijkstra(startNode, targetNodes) {
     
     while (paths) {
         let [path, cost] = paths.pop();
-        currentNode = path[path.length - 1];
+        const currentNode = path[path.length - 1];
         if (targetNodes.has(currentNode)) {
             return path;
         }
@@ -45,7 +44,7 @@ function spreadCost(graph, startNode, mapSize, costFunc, maxDepth) {
                 sideNode.children.set(node, costFunc(currentCost, depth));
 
                 if (!visited.has(sideNode)) {
-                    nodes.push([sideNode, level + 1]);
+                    nodes.push([sideNode, depth + 1]);
                 }
             }
         }
